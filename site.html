@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فروشگاه کانفیگ پیشرفته</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Vazirmatn', sans-serif; }
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+    .cart-float {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 50;
+      width: 320px;
+    }
+    @media (max-width: 768px) {
+      .cart-float {
+        width: 100%;
+        left: 0;
+        top: 0;
+        border-radius: 0 0 1.5rem 1.5rem;
+      }
+    }
+    .fade-out {
+      animation: fadeOut 2s forwards;
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; display: none; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-purple-950 text-white min-h-screen relative">
+
+  <button onclick="toggleCart()" class="fixed top-4 left-4 z-50 bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-full shadow-lg">
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+  </svg>
+  <span id="cart-count" class="absolute -top-2 -left-2 bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">0</span>
+</button>
+
+<div id="cart-panel" class="glass fixed top-16 left-4 z-40 w-80 p-4 rounded-2xl mx-auto shadow-xl hidden">
+  <div class="flex justify-between items-center mb-3">
+    <h2 class="text-lg font-bold text-yellow-300 flex items-center">
+      🛒 سبد خرید
+    </h2>
+    <button onclick="toggleCart()" class="text-gray-400 hover:text-white">
+      ✖
+    </button>
+  </div>
+  <ul id="cart-items" class="text-sm space-y-2 max-h-40 overflow-y-auto"></ul>
+  <div class="mt-3 flex justify-between items-center">
+    <span class="font-bold">مجموع:</span>
+    <span id="cart-total" class="text-green-400 font-bold">0 تومان</span>
+  </div>
+  <button onclick="checkout()" class="mt-3 w-full bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white py-2 rounded-xl font-bold transition-all">
+    تسویه حساب
+  </button>
+</div>
+
+<header class="w-full py-8 text-center bg-gradient-to-r from-purple-800 to-indigo-900 shadow-xl">
+    <h1 class="text-4xl font-extrabold text-white">نت پیک</h1>
+    <p class="text-lg text-gray-300 mt-2">بهترین کانفیگ‌ها برای نیازهای شما</p>
+</header>
+
+  <main class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+  <div class="glass p-6 rounded-3xl shadow-lg transition-all duration-300 hover:scale-[1.03]">
+    <h3 class="text-2xl font-bold text-purple-400 mb-2">کانفیگ گیمینگ 🎮</h3>
+    <p class="text-green-400 font-semibold">43.000 تومان</p>
+    <p class="text-gray-300 text-sm mt-1">پایداری بالا برای گیمرها</p>
+    <button onclick="addToCart('کانفیگ گیمینگ', 43000)" class="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl font-bold">افزودن به سبد</button>
+    <p class="mt-4 text-sm text-gray-400">⚡ مخصوص گیمرهای حرفه‌ای با پینگ پایین، ثبات بالا و بدون قطعی. مناسب پابجی، کال آو دیوتی، فورتنایت.</p>
+  </div>
+  <div class="glass p-6 rounded-3xl shadow-lg transition-all duration-300 hover:scale-[1.03]">
+    <h3 class="text-2xl font-bold text-blue-400 mb-2">کانفیگ امنیتی 🔐</h3>
+    <p class="text-green-400 font-semibold">38.000 تومان</p>
+    <p class="text-gray-300 text-sm mt-1">حفاظت کامل و سرعت مناسب</p>
+    <button onclick="addToCart('کانفیگ امنیتی', 38000)" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-bold">افزودن به سبد</button>
+    <p class="mt-4 text-sm text-gray-400">🛡️ رمزنگاری قوی، مناسب بانکداری و استفاده روزانه بدون افت سرعت. شامل OpenVPN و WireGuard.</p>
+  </div>
+  <div class="glass p-6 rounded-3xl shadow-lg transition-all duration-300 hover:scale-[1.03]">
+    <h3 class="text-2xl font-bold text-pink-400 mb-2">کانفیگ استریم 📺</h3>
+    <p class="text-green-400 font-semibold">89.900 تومان</p>
+    <p class="text-gray-300 text-sm mt-1">برای تولیدکنندگان محتوا</p>
+    <button onclick="addToCart('کانفیگ استریم', 89900)" class="mt-4 w-full bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-xl font-bold">افزودن به سبد</button>
+    <p class="mt-4 text-sm text-gray-400">📡 سرعت بالا در آپلود و دانلود، بدون محدودیت حجمی، ایده‌آل برای پخش زنده 4K و بدون افت کیفیت.</p>
+  </div>
+</main>
+
+  <div id="payment-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+    <div class="glass p-6 rounded-2xl w-full max-w-md">
+      <h2 class="text-xl font-bold text-yellow-300 mb-4">جزئیات پرداخت</h2>
+      <p class="text-gray-300 mb-2">مبلغ قابل پرداخت:</p>
+      <p id="payment-total" class="text-2xl text-green-400 font-bold mb-4"></p>
+      <p class="text-gray-300 mb-2">شماره کارت:</p>
+      <div class="flex justify-between items-center bg-gray-800 p-3 rounded-xl">
+        <span id="card-number" class="text-lg text-blue-400 font-bold">6219-8619-5839-1764</span>
+        <button onclick="copyCard()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">کپی</button>
+      </div>
+      <p class="text-sm text-gray-400 mt-4">لطفاً پس از واریز، رسید را به آیدی تلگرام زیر ارسال کنید:</p>
+      <p class="mt-2 text-green-400 font-semibold">@edamir11</p>
+      <button onclick="closePayment()" class="mt-6 w-full bg-red-600 hover:bg-red-700 py-2 rounded-xl text-white font-bold">بستن</button>
+    </div>
+  </div>
+
+  <div id="add-to-cart-notification" class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hidden">
+    محصول به سبد خرید اضافه شد!
+  </div>
+
+  <script>
+    const cart = [];
+
+    function renderCart() {
+      const itemsContainer = document.getElementById('cart-items');
+      const totalText = document.getElementById('cart-total');
+      const count = document.getElementById('cart-count');
+
+      itemsContainer.innerHTML = '';
+      let total = 0;
+      let countItems = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price;
+        countItems++;
+        const li = document.createElement('li');
+        li.className = 'flex justify-between items-center';
+        li.innerHTML = `
+          <span>${item.name}</span>
+          <div class="flex items-center">
+            <span>${item.price.toLocaleString()} تومان</span>
+            <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-600 ml-2">✖</button>
+          </div>
+        `;
+        itemsContainer.appendChild(li);
+      });
+
+      totalText.innerText = total.toLocaleString() + ' تومان';
+      count.innerText = countItems;
+      document.getElementById('payment-total').innerText = total.toLocaleString() + ' تومان';
+    }
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      renderCart();
+      showNotification();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert('سبد خرید خالی است!');
+        return;
+      }
+      document.getElementById('payment-modal').classList.remove('hidden');
+      document.getElementById('payment-modal').classList.add('flex');
+      renderCart(); // Update total in payment modal
+    }
+
+    function closePayment() {
+      document.getElementById('payment-modal').classList.add('hidden');
+      document.getElementById('payment-modal').classList.remove('flex');
+    }
+
+    function copyCard() {
+      const text = document.getElementById('card-number').innerText;
+      navigator.clipboard.writeText(text.replace(/-/g, '')).then(() => {
+        alert('شماره کارت کپی شد!');
+      });
+    }
+
+    function toggleCart() {
+      const panel = document.getElementById('cart-panel');
+      panel.classList.toggle('hidden');
+    }
+
+    function showNotification() {
+      const notification = document.getElementById('add-to-cart-notification');
+      notification.classList.remove('hidden');
+      notification.classList.add('fade-out'); // Apply fade-out animation
+      setTimeout(() => {
+        notification.classList.add('hidden');
+        notification.classList.remove('fade-out'); // Remove fade-out class for next time
+      }, 2000); // Hide after 2 seconds
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCart);
+  </script>
+</body>
+</html>
